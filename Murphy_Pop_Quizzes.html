@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murphy's Revision Quizzes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e1117;
+  --surface: #161b26;
+  --surface2: #1e2535;
+  --border: #2a3347;
+  --text: #e2e8f0;
+  --muted: #8899aa;
+  --amber: #f0a500;
+  --amber-dim: #c8880a;
+  --white: #ffffff;
+  --radius: 14px;
+  --bio: #1a6b3a; --bio-light: #22895a;
+  --chem: #0b7a75; --chem-light: #0d9e97;
+  --phys: #1565c0; --phys-light: #1976d2;
+  --econ: #b06000; --econ-light: #c8880a;
+  --biz: #1b2a4a; --biz-light: #243a6a;
+  --geo: #5c3a1e; --geo-light: #7a4f2a;
+  --maths: #a82020; --maths-light: #c42828;
+  --elang: #5c2d8a; --elang-light: #7a3db8;
+  --elit: #2c1a4a; --elit-light: #3d2565;
+  --fm: #1a1a2e; --fm-light: #2a2a4a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── HOME ── */
+#home {
+  padding: 0;
+  background: linear-gradient(160deg, #0e1117 0%, #161b26 60%, #1a1a2e 100%);
+}
+
+.home-hero {
+  padding: 52px 28px 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-eyebrow {
+  display: inline-block;
+  background: var(--amber-dim);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+}
+
+.home-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 13vw, 82px);
+  line-height: 0.92;
+  color: var(--white);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.home-title em {
+  color: var(--amber);
+  font-style: normal;
+}
+
+.home-sub {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Subject grid */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 20px 16px 32px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.subj-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.subj-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.subj-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.subj-btn:active { transform: scale(0.98); }
+
+.subj-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.subj-count {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Subject colours */
+.s-bio::before { background: var(--bio); } .s-bio:hover { border-color: var(--bio); }
+.s-chem::before { background: var(--chem); } .s-chem:hover { border-color: var(--chem); }
+.s-phys::before { background: var(--phys); } .s-phys:hover { border-color: var(--phys); }
+.s-econ::before { background: var(--econ); } .s-econ:hover { border-color: var(--econ); }
+.s-biz::before { background: var(--biz-light); } .s-biz:hover { border-color: var(--biz-light); }
+.s-geo::before { background: var(--geo); } .s-geo:hover { border-color: var(--geo); }
+.s-maths::before { background: var(--maths); } .s-maths:hover { border-color: var(--maths); }
+.s-elang::before { background: var(--elang); } .s-elang:hover { border-color: var(--elang); }
+.s-elit::before { background: var(--elit-light); } .s-elit:hover { border-color: var(--elit-light); }
+.s-fm::before { background: var(--fm-light); } .s-fm:hover { border-color: var(--fm-light); }
+
+/* ── TOPIC MENU ── */
+#topics {
+  background: var(--bg);
+}
+
+.menu-header {
+  padding: 20px 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.back-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.back-btn:hover { background: var(--surface2); }
+
+.menu-header-text { flex: 1; }
+.menu-subj-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--white);
+}
+.menu-subj-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.topic-list {
+  padding: 12px 14px 32px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.topic-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s;
+}
+.topic-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.topic-item:active { transform: scale(0.99); }
+
+.topic-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.topic-info { flex: 1; }
+.topic-name { font-weight: 700; font-size: 14px; color: var(--white); }
+.topic-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.topic-arrow { color: var(--muted); font-size: 16px; }
+
+/* ── QUIZ SCREEN ── */
+#quiz {
+  background: var(--bg);
+  padding-bottom: 40px;
+}
+
+.quiz-header {
+  padding: 16px 18px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.quiz-header-info { flex: 1; }
+.quiz-subj-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.quiz-topic-label {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+}
+
+.progress-track {
+  padding: 14px 18px 4px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+.progress-txt {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.score-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+.score-chip span { color: var(--amber); }
+
+/* Question card */
+.question-wrap {
+  padding: 8px 16px 0;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.q-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.q-text {
+  font-size: clamp(17px,3.8vw,21px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.45;
+  margin-bottom: 24px;
+}
+
+/* Answer */
+.answer-area {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.answer-label-txt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.answer-text {
+  font-size: clamp(14px,3vw,17px);
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.answer-text strong { color: var(--amber); }
+
+.answer-hidden { display: none; }
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1;
+  min-width: 110px;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.13s ease;
+  letter-spacing: 0.2px;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-reveal {
+  background: var(--amber-dim);
+  color: var(--white);
+  width: 100%;
+}
+.btn-reveal:hover { background: var(--amber); }
+
+.btn-got {
+  background: #166534;
+  color: #bbf7d0;
+  border: 1px solid #15803d;
+}
+.btn-got:hover { background: #15803d; }
+
+.btn-nope {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-nope:hover { background: var(--border); color: var(--text); }
+
+.btn-next {
+  background: var(--amber-dim);
+  color: var(--white);
+  width: 100%;
+  margin-top: 10px;
+}
+.btn-next:hover { background: var(--amber); }
+
+/* Flash */
+@keyframes flashGreen {
+  0%,100% { border-color: var(--border); }
+  50% { border-color: #22c55e; box-shadow: 0 0 24px rgba(34,197,94,0.25); }
+}
+@keyframes flashRed {
+  0%,100% { border-color: var(--border); }
+  50% { border-color: #ef4444; box-shadow: 0 0 24px rgba(239,68,68,0.2); }
+}
+.flash-g { animation: flashGreen 0.5s ease; }
+.flash-r { animation: flashRed 0.5s ease; }
+
+/* ── RESULT ── */
+.result-wrap {
+  padding: 16px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 40px 28px;
+  text-align: center;
+  animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.result-emoji {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  animation: popIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+@keyframes popIn {
+  from { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.12); }
+  to { transform: scale(1); opacity: 1; }
+}
+.result-score {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--white);
+}
+.result-score em { color: var(--amber); font-style: normal; }
+.result-msg {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 10px 0 6px;
+}
+.result-sub {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+.btn-again {
+  background: var(--amber-dim);
+  color: var(--white);
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.13s;
+}
+.btn-again:hover { background: var(--amber); }
+.btn-menu {
+  background: var(--surface2);
+  color: var(--muted);
+  width: 100%;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+.btn-menu:hover { background: var(--border); color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- ── HOME ── -->
+<div class="screen active" id="home">
+  <div class="home-hero">
+    <div class="home-eyebrow">2026 GCSE Season</div>
+    <div class="home-title">Murphy's<br><em>Pop Quizzes</em></div>
+    <div class="home-sub">Pick a subject, then choose a topic</div>
+  </div>
+  <div class="subject-grid" id="subjectGrid"></div>
+</div>
+
+<!-- ── TOPIC MENU ── -->
+<div class="screen" id="topics">
+  <div class="menu-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="menu-header-text">
+      <div class="menu-subj-name" id="menuSubjName">Biology</div>
+      <div class="menu-subj-sub" id="menuSubjSub">Choose a topic</div>
+    </div>
+  </div>
+  <div class="topic-list" id="topicList"></div>
+</div>
+
+<!-- ── QUIZ ── -->
+<div class="screen" id="quiz">
+  <div class="quiz-header">
+    <button class="back-btn" onclick="goTopics()">←</button>
+    <div class="quiz-header-info">
+      <div class="quiz-subj-label" id="quizSubjLabel"></div>
+      <div class="quiz-topic-label" id="quizTopicLabel"></div>
+    </div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-txt" id="progressTxt">Q1 of 5</div>
+    </div>
+    <div class="score-chip">Score: <span id="scoreDisplay">0/5</span></div>
+  </div>
+  <div class="question-wrap" id="questionWrap"></div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const SUBJECTS = {
+  "Biology":      { cls:"s-bio",   color:"#1a6b3a" },
+  "Business":     { cls:"s-biz",   color:"#243a6a" },
+  "Chemistry":    { cls:"s-chem",  color:"#0b7a75" },
+  "Economics":    { cls:"s-econ",  color:"#b06000" },
+  "English Lang": { cls:"s-elang", color:"#5c2d8a" },
+  "English Lit":  { cls:"s-elit",  color:"#3d2565" },
+  "Further Maths":{ cls:"s-fm",    color:"#2a2a4a" },
+  "Geography":    { cls:"s-geo",   color:"#5c3a1e" },
+  "Maths":        { cls:"s-maths", color:"#a82020" },
+  "Physics":      { cls:"s-phys",  color:"#1565c0" },
+};
+
+// Each quiz: { label, week, qs: [{q, a}] }
+// Topics appearing twice get different question sets — no repeated questions
+const QUIZZES = {
+"Biology": {
+  "Cell biology": { label:"Wk 1 · Mon 30 Mar", qs:[
+    {q:"Name THREE structures found in plant cells but NOT in animal cells.",
+     a:"Cell wall (cellulose), large central vacuole, and chloroplasts."},
+    {q:"What is osmosis?",
+     a:"The movement of water molecules through a partially permeable membrane from a region of high water concentration to low water concentration."},
+    {q:"What is the difference between diffusion and active transport?",
+     a:"Diffusion is passive — down the concentration gradient, no energy needed. Active transport moves against the gradient and requires ATP energy."},
+    {q:"A cell image measures 30 mm. The actual cell is 0.05 mm. What is the magnification?",
+     a:"Magnification = image ÷ actual = 30 ÷ 0.05 = ×600."},
+    {q:"What is the function of mitochondria?",
+     a:"They are the site of aerobic respiration, producing ATP (energy). Cells with high energy demands (e.g. muscle cells) have more mitochondria."},
+  ]},
+  "Organisation": { label:"Wk 1 · Sun 5 Apr", qs:[
+    {q:"What is the correct order of organisation from smallest to largest?",
+     a:"Cell → Tissue → Organ → Organ system → Organism."},
+    {q:"Name THREE enzymes in digestion, where each is produced, and what it breaks down.",
+     a:"Amylase (salivary glands/pancreas) — starch to sugars. Protease (stomach/pancreas) — proteins to amino acids. Lipase (pancreas) — fats to fatty acids and glycerol."},
+    {q:"What is the difference between arteries, veins and capillaries?",
+     a:"Arteries: thick walls, carry blood from heart at high pressure. Veins: valves, return blood at low pressure. Capillaries: one cell thick, site of exchange."},
+    {q:"What causes coronary heart disease?",
+     a:"Fatty deposits (atherosclerosis) build up in the coronary arteries, restricting blood flow to the heart muscle."},
+    {q:"What is the role of the liver in digestion?",
+     a:"Produces bile, which emulsifies fats (breaks them into smaller droplets) to increase surface area for lipase enzymes."},
+  ]},
+  "Mitosis vs meiosis": { label:"Wk 2 · Thu 9 Apr", qs:[
+    {q:"How many cells does mitosis produce, and what is their ploidy?",
+     a:"2 genetically identical diploid (2n) daughter cells."},
+    {q:"How many cells does meiosis produce, and what is their ploidy?",
+     a:"4 genetically different haploid (n) cells (gametes)."},
+    {q:"What is the purpose of mitosis vs meiosis?",
+     a:"Mitosis: growth and repair. Meiosis: sexual reproduction — producing gametes with genetic variation."},
+    {q:"Human diploid number vs haploid number?",
+     a:"Diploid = 46 chromosomes (body cells). Haploid = 23 chromosomes (gametes)."},
+    {q:"What is differentiation?",
+     a:"The process by which cells become specialised for a specific function (e.g. red blood cells, nerve cells)."},
+  ]},
+  "Mitosis vs meiosis (2nd session)": { label:"Wk 4 · Tue 21 Apr", qs:[
+    {q:"What is a stem cell?",
+     a:"An undifferentiated cell that can divide and develop into different cell types. Embryonic stem cells can become any cell type."},
+    {q:"Where in the body does meiosis take place?",
+     a:"In the reproductive organs — testes (producing sperm) and ovaries (producing eggs)."},
+    {q:"Why does meiosis produce genetic variation?",
+     a:"Chromosomes are shuffled and recombined differently in each division (crossing over and independent assortment), producing unique gametes."},
+    {q:"What is the difference between a haploid and diploid cell?",
+     a:"Haploid (n): contains one set of chromosomes. Diploid (2n): contains two complete sets. Body cells are diploid; gametes are haploid."},
+    {q:"What happens at fertilisation in terms of chromosome number?",
+     a:"Two haploid gametes (23 chromosomes each) fuse to form a diploid zygote (46 chromosomes)."},
+  ]},
+  "Infection & response": { label:"Wk 3 · Wed 15 Apr", qs:[
+    {q:"Name the four types of pathogen.",
+     a:"Bacteria, viruses, fungi, and protists."},
+    {q:"How do lymphocytes defend the body?",
+     a:"They produce specific antibodies that bind to antigens on pathogens, marking them for destruction. Memory cells remain for faster future responses."},
+    {q:"Why do antibiotics not work on viruses?",
+     a:"Antibiotics target bacterial cell structures (cell wall, ribosomes). Viruses use host cells and lack these structures."},
+    {q:"What is vaccination and how does it work?",
+     a:"Introducing a weakened or dead pathogen triggers an immune response and memory cell production — giving immunity without causing disease."},
+    {q:"What is antibiotic resistance and why is it a problem?",
+     a:"Some bacteria develop resistance through natural selection. Resistant bacteria survive, reproduce and spread — making infections harder to treat."},
+  ]},
+  "Bioenergetics": { label:"Wk 5 · Mon 27 Apr", qs:[
+    {q:"Write the word equation for aerobic respiration.",
+     a:"Glucose + Oxygen → Carbon dioxide + Water (+ ATP energy)."},
+    {q:"Write the word equation for anaerobic respiration in animals.",
+     a:"Glucose → Lactic acid (+ small amount of ATP)."},
+    {q:"What is the word equation for photosynthesis?",
+     a:"Carbon dioxide + Water (+ light energy) → Glucose + Oxygen."},
+    {q:"Name THREE factors that can limit the rate of photosynthesis.",
+     a:"Light intensity, carbon dioxide concentration, and temperature."},
+    {q:"What is an oxygen debt after exercise?",
+     a:"The extra oxygen needed after exercise to break down lactic acid that built up during anaerobic respiration."},
+  ]},
+  "Natural selection & evolution": { label:"Wk 5 · Sun 3 May", qs:[
+    {q:"Write out the five steps of natural selection.",
+     a:"1. Variation. 2. Competition for resources. 3. Better-adapted individuals survive. 4. They reproduce and pass on advantageous alleles. 5. Allele frequency changes over generations."},
+    {q:"How does antibiotic resistance demonstrate natural selection?",
+     a:"Random mutation gives some bacteria resistance. Antibiotics kill non-resistant bacteria; resistant ones survive, reproduce and pass on the resistance gene."},
+    {q:"What is speciation?",
+     a:"When two populations become reproductively isolated, accumulate different mutations, and can no longer interbreed — forming a new species."},
+    {q:"Name two pieces of evidence for evolution.",
+     a:"The fossil record (gradual changes over time) and antibiotic resistance (natural selection observed directly)."},
+    {q:"What is the difference between natural selection and selective breeding?",
+     a:"Natural selection: environment drives change over long time periods. Selective breeding: humans direct change rapidly, but reduces genetic diversity."},
+  ]},
+  "Ecosystems & eutrophication": { label:"Wk 6 · Thu 7 May", qs:[
+    {q:"Describe eutrophication in five steps.",
+     a:"1. Fertiliser runoff adds nitrates/phosphates. 2. Algal bloom. 3. Algae blocks light — plants die. 4. Bacteria decompose dead plants. 5. Bacteria use up oxygen — fish die."},
+    {q:"What directly kills fish during eutrophication?",
+     a:"Lack of dissolved oxygen — used up by decomposing bacteria, not directly by the algae."},
+    {q:"Why does only ~10% of energy transfer between trophic levels?",
+     a:"The rest is lost as heat during respiration, through movement, excretion, and undigested material."},
+    {q:"What is biodiversity and why does it matter?",
+     a:"The variety of species in an area. High biodiversity = more stable, resilient ecosystem."},
+    {q:"What is a decomposer and what role does it play?",
+     a:"Bacteria and fungi that break down dead organic matter, recycling nutrients back into the soil."},
+  ]},
+  "Ecosystems & eutrophication (2nd session)": { label:"Wk 9 · Mon 25 May", qs:[
+    {q:"Name two human activities that reduce biodiversity.",
+     a:"Deforestation and pollution (accept: urbanisation, overfishing, habitat destruction, climate change)."},
+    {q:"What is a food web?",
+     a:"A diagram showing the interconnected feeding relationships between multiple species in an ecosystem."},
+    {q:"What does the pyramid of biomass show?",
+     a:"The mass of living material at each trophic level — always gets smaller going up as energy is lost."},
+    {q:"What is meant by sustainable use of ecosystems?",
+     a:"Managing resources so they can continue to be used by future generations — e.g. sustainable forestry, fishing quotas."},
+    {q:"What is the difference between a producer and a consumer?",
+     a:"Producer: makes its own food via photosynthesis (e.g. grass). Consumer: obtains energy by eating other organisms."},
+  ]},
+  "Homeostasis": { label:"Wk 8 · Mon 18 May", qs:[
+    {q:"What is homeostasis?",
+     a:"The maintenance of a stable internal environment using negative feedback systems."},
+    {q:"What hormone lowers blood glucose, and how?",
+     a:"Insulin — secreted by the pancreas, stimulates cells to absorb glucose and the liver to convert it to glycogen (glycogenesis)."},
+    {q:"What hormone raises blood glucose, and how?",
+     a:"Glucagon — secreted by the pancreas, stimulates the liver to convert glycogen back into glucose (glycogenolysis)."},
+    {q:"What is the difference between Type 1 and Type 2 diabetes?",
+     a:"Type 1: autoimmune — pancreas cannot produce insulin, treated with injections. Type 2: cells become resistant to insulin, linked to obesity, managed with lifestyle changes."},
+    {q:"How does the body respond when it overheats?",
+     a:"Blood vessels dilate (vasodilation) and sweat glands produce more sweat — evaporation cools the skin."},
+  ]},
+  "Inheritance": { label:"Wk 10 · Wed 3 Jun", qs:[
+    {q:"What is the difference between genotype and phenotype?",
+     a:"Genotype: the allele combination (e.g. Aa). Phenotype: the observable characteristic resulting from it (e.g. brown eyes)."},
+    {q:"In an Aa × Aa cross, what is the expected phenotype ratio?",
+     a:"3 dominant phenotype : 1 recessive phenotype."},
+    {q:"What is a dominant allele?",
+     a:"An allele expressed even when only one copy is present — it masks the recessive allele."},
+    {q:"What determines biological sex in humans?",
+     a:"Sex chromosomes: XX = female, XY = male. There is a 50:50 probability of each sex."},
+    {q:"What is a mutation?",
+     a:"A change to the DNA base sequence. Most are neutral; some harmful; very rarely beneficial and a source of variation."},
+  ]},
+  "Required practicals": { label:"Wk 9 · Thu 28 May", qs:[
+    {q:"What is the independent variable in an experiment?",
+     a:"The variable deliberately changed by the experimenter."},
+    {q:"Why use percentage change in mass rather than raw mass change in the osmosis practical?",
+     a:"It standardises results so cylinders of different starting masses can be compared fairly."},
+    {q:"In the enzyme practical, why is temperature controlled using a water bath?",
+     a:"To maintain a constant, precise temperature — enzymes are very sensitive to temperature changes."},
+    {q:"Why is the antibiotic disc practical incubated at 25°C, not 37°C?",
+     a:"25°C reduces the risk of culturing dangerous human pathogens — 37°C (body temperature) would encourage harmful bacterial growth."},
+    {q:"What is a control variable and why is it important?",
+     a:"A variable kept constant to ensure a fair test — so only the independent variable affects the results."},
+  ]},
+},
+
+"Business": {
+  "Business operations": { label:"Wk 1 · Mon 30 Mar", qs:[
+    {q:"Name the four main production methods.",
+     a:"Job (one-off), Batch (groups), Flow (continuous), and Cell (lean/team-based)."},
+    {q:"What is Just-In-Time (JIT) stock management?",
+     a:"Stock arrives exactly when needed — minimising storage costs, but risking stock-outs if deliveries are late."},
+    {q:"What is the difference between quality control and quality assurance?",
+     a:"Quality control checks finished products at the end. Quality assurance checks quality throughout the production process."},
+    {q:"What is Kaizen?",
+     a:"Continuous incremental improvement involving all employees — a core lean production principle."},
+    {q:"What is capacity utilisation?",
+     a:"The percentage of maximum possible output a business is currently producing. High utilisation = efficient use of resources."},
+  ]},
+  "Finance & profit calculations": { label:"Wk 2 · Mon 6 Apr", qs:[
+    {q:"What is the formula for gross profit?",
+     a:"Gross Profit = Revenue − Cost of Sales."},
+    {q:"What is the formula for net profit?",
+     a:"Net Profit = Gross Profit − Expenses (overheads)."},
+    {q:"What is the break-even formula?",
+     a:"Break-even output = Fixed Costs ÷ (Selling Price − Variable Cost per unit)."},
+    {q:"What is margin of safety?",
+     a:"Actual output minus break-even output — how far sales can fall before a loss is made."},
+    {q:"What is a cash flow forecast?",
+     a:"A monthly projection of expected cash inflows and outflows, showing the opening and closing balance each month."},
+  ]},
+  "Marketing": { label:"Wk 2 · Sun 12 Apr", qs:[
+    {q:"What are the 4 Ps of the marketing mix?",
+     a:"Product, Price, Place, Promotion."},
+    {q:"What is penetration pricing?",
+     a:"Setting a low price to enter a market and gain market share — the price may be raised later."},
+    {q:"What is a USP?",
+     a:"Unique Selling Point — what makes a product or service distinct from competitors."},
+    {q:"What is the product life cycle?",
+     a:"Introduction → Growth → Maturity → Decline. Extension strategies can prolong the maturity stage."},
+    {q:"What is market segmentation?",
+     a:"Dividing a market into groups with similar characteristics (age, income, lifestyle) to target them more effectively."},
+  ]},
+  "Finance & profit calculations (2nd session)": { label:"Wk 3 · Thu 16 Apr", qs:[
+    {q:"What is contribution per unit?",
+     a:"Selling price minus variable cost per unit. It contributes towards covering fixed costs and then profit."},
+    {q:"Name THREE internal sources of finance.",
+     a:"Retained profit, selling assets, and owner's savings/capital."},
+    {q:"Why can a profitable business still have cash flow problems?",
+     a:"Profit is recorded when a sale is made; cash arrives later. Timing mismatches can cause cash shortfalls."},
+    {q:"What is the gross profit margin formula?",
+     a:"Gross Profit ÷ Revenue × 100. Shows the percentage of revenue kept after direct costs."},
+    {q:"What is the difference between fixed and variable costs?",
+     a:"Fixed costs do not change with output (e.g. rent). Variable costs change with output (e.g. raw materials)."},
+  ]},
+  "Human resources": { label:"Wk 4 · Wed 22 Apr", qs:[
+    {q:"State Maslow's hierarchy of needs from bottom to top.",
+     a:"Physiological → Safety → Social → Esteem → Self-actualisation."},
+    {q:"What is a Herzberg hygiene factor?",
+     a:"A factor that prevents dissatisfaction but doesn't motivate on its own — e.g. pay, working conditions, job security."},
+    {q:"What is the formula for labour turnover?",
+     a:"(Number leaving ÷ Average number employed) × 100."},
+    {q:"What is the difference between on-the-job and off-the-job training?",
+     a:"On-the-job: at the workplace, cheaper, immediately relevant. Off-the-job: external course, broader skills but more costly."},
+    {q:"What is delegation?",
+     a:"Passing responsibility for a task to a subordinate — can increase motivation but requires trust."},
+  ]},
+  "External influences": { label:"Wk 5 · Tue 28 Apr", qs:[
+    {q:"How does a rise in interest rates affect a business?",
+     a:"Borrowing becomes more expensive, reducing investment. Consumer spending may also fall, reducing demand."},
+    {q:"What is CSR?",
+     a:"Corporate Social Responsibility — voluntary actions beyond legal requirements to benefit society or the environment."},
+    {q:"How does inflation affect a business?",
+     a:"Rising prices increase costs of raw materials and wages. Businesses may raise prices, which can reduce demand."},
+    {q:"What does PESTLE stand for?",
+     a:"Political, Economic, Social, Technological, Legal, Environmental."},
+    {q:"Name THREE external stakeholder groups.",
+     a:"Customers, suppliers, government, local community, or banks (any three)."},
+  ]},
+  "Evaluative extended writing": { label:"Wk 6 · Mon 4 May", qs:[
+    {q:"What does PEEL stand for?",
+     a:"Point, Evidence, Explain, Link back to the question."},
+    {q:"Give THREE evaluative phrases for a business answer.",
+     a:"'This depends on...', 'However, in the long term...', 'For this particular business...'"},
+    {q:"What makes a conclusion evaluative rather than just a summary?",
+     a:"It reaches a justified judgement — stating which factor is MOST important and WHY, not just restating both sides."},
+    {q:"What command word means 'weigh up evidence and reach a judgement'?",
+     a:"Evaluate."},
+    {q:"Why is applying theory to the specific case study important?",
+     a:"Generic answers are capped at low marks. Using specific case study details (names, figures, context) earns application marks."},
+  ]},
+  "Business strategy": { label:"Wk 7 · Thu 14 May", qs:[
+    {q:"What is a SWOT analysis?",
+     a:"Strengths and Weaknesses (internal) + Opportunities and Threats (external) — used to inform strategic decisions."},
+    {q:"What is the difference between organic and inorganic growth?",
+     a:"Organic: internal growth through new products or markets. Inorganic: external growth through mergers, acquisitions or franchising."},
+    {q:"What is a franchise?",
+     a:"A licence to trade under an established brand in exchange for fees and royalties paid to the franchisor."},
+    {q:"What is the difference between a merger and a takeover?",
+     a:"Merger: two businesses agree to combine. Takeover: one business acquires another — may be hostile."},
+    {q:"What is market share and why does it matter?",
+     a:"A firm's sales as a percentage of total market sales. Higher market share = stronger competitive position and greater pricing power."},
+  ]},
+},
+
+"Chemistry": {
+  "Atomic structure & bonding": { label:"Wk 1 · Tue 31 Mar", qs:[
+    {q:"What is the mass number of an atom?",
+     a:"The total number of protons and neutrons in the nucleus."},
+    {q:"What are isotopes?",
+     a:"Atoms of the same element with the same number of protons but different numbers of neutrons."},
+    {q:"What type of bonding occurs between a metal and a non-metal?",
+     a:"Ionic bonding — electrons are transferred from the metal to the non-metal, forming oppositely charged ions."},
+    {q:"Why do ionic compounds have high melting points?",
+     a:"Giant lattice structure with strong electrostatic forces between ions — a lot of energy is needed to break these."},
+    {q:"What is metallic bonding?",
+     a:"Positive metal ions surrounded by a sea of delocalised electrons — makes metals good conductors and malleable."},
+  ]},
+  "Moles & quantitative chemistry": { label:"Wk 2 · Mon 6 Apr", qs:[
+    {q:"What is the formula for calculating moles from mass?",
+     a:"Moles = Mass ÷ Mr (relative formula mass)."},
+    {q:"Calculate the Mr of H₂O. (H=1, O=16)",
+     a:"Mr = (2×1) + 16 = 18 g/mol."},
+    {q:"What is percentage yield?",
+     a:"% yield = (actual yield ÷ theoretical yield) × 100. Always less than 100% due to incomplete reactions or loss during transfer."},
+    {q:"What is atom economy?",
+     a:"Atom economy = (Mr of desired product ÷ sum of Mr of all products) × 100. Higher = less waste, more sustainable."},
+    {q:"What is concentration in chemistry?",
+     a:"Concentration (mol/dm³) = moles ÷ volume (dm³). Note: 1 dm³ = 1 litre = 1000 cm³."},
+  ]},
+  "Chemical changes": { label:"Wk 3 · Mon 13 Apr", qs:[
+    {q:"What does OIL RIG stand for?",
+     a:"Oxidation Is Loss (of electrons), Reduction Is Gain (of electrons)."},
+    {q:"Name the top 5 elements of the reactivity series (most to least reactive).",
+     a:"Potassium, Sodium, Calcium, Magnesium, Aluminium."},
+    {q:"What is a displacement reaction?",
+     a:"A more reactive element displaces a less reactive element from its compound."},
+    {q:"How is aluminium extracted from its ore, and why this method?",
+     a:"By electrolysis of molten aluminium oxide — it is too reactive to reduce with carbon."},
+    {q:"What is neutralisation?",
+     a:"The reaction between an acid and a base to form a salt and water. H⁺(aq) + OH⁻(aq) → H₂O(l)."},
+  ]},
+  "Moles & quantitative chemistry (2nd session)": { label:"Wk 3 · Sun 19 Apr", qs:[
+    {q:"Calculate the Mr of CaCO₃. (Ca=40, C=12, O=16)",
+     a:"Mr = 40 + 12 + (3×16) = 100 g/mol."},
+    {q:"Why is percentage yield always less than 100%?",
+     a:"Incomplete reactions, side reactions, reversible reactions, and loss during filtration or transfer."},
+    {q:"How many moles are in 22 g of CO₂? (C=12, O=16)",
+     a:"Mr of CO₂ = 44. Moles = 22 ÷ 44 = 0.5 mol."},
+    {q:"What is the molar ratio and why does it matter?",
+     a:"The ratio of moles of reactants and products shown by the coefficients in a balanced equation — used to calculate theoretical yield."},
+    {q:"What mass of MgO is produced from 12 g of Mg? (Mg=24, O=16) 2Mg + O₂ → 2MgO",
+     a:"Moles of Mg = 12÷24 = 0.5 mol. Ratio 1:1, so 0.5 mol MgO. Mass = 0.5 × 40 = 20 g."},
+  ]},
+  "Balancing equations": { label:"Wk 4 · Thu 23 Apr", qs:[
+    {q:"What must NEVER be changed when balancing an equation?",
+     a:"The subscripts — only coefficients (large numbers in front of formulae) can be added or changed."},
+    {q:"Balance this equation: H₂ + O₂ → H₂O",
+     a:"2H₂ + O₂ → 2H₂O."},
+    {q:"What do state symbols mean? Give all four.",
+     a:"(s) solid, (l) liquid, (g) gas, (aq) aqueous (dissolved in water)."},
+    {q:"Why must chemical equations be balanced?",
+     a:"Conservation of mass — atoms cannot be created or destroyed, so the number of each atom must be equal on both sides."},
+    {q:"What is a half equation?",
+     a:"An equation showing either oxidation or reduction separately, including electrons (e⁻)."},
+  ]},
+  "Energy changes": { label:"Wk 5 · Wed 29 Apr", qs:[
+    {q:"What is an exothermic reaction? Give an example.",
+     a:"A reaction that releases energy to the surroundings — temperature rises. Examples: combustion, neutralisation, respiration."},
+    {q:"What is an endothermic reaction? Give an example.",
+     a:"A reaction that absorbs energy from the surroundings — temperature falls. Examples: thermal decomposition, dissolving ammonium nitrate."},
+    {q:"What is activation energy?",
+     a:"The minimum energy required for a reaction to occur. A catalyst provides an alternative pathway with lower activation energy."},
+    {q:"In bond energy calculations, if delta H is negative, is the reaction exothermic or endothermic?",
+     a:"Exothermic — more energy is released forming bonds than is taken in breaking them."},
+    {q:"What is the formula: delta H = ?",
+     a:"ΔH = Energy in (breaking bonds) − Energy out (forming bonds). Negative ΔH = exothermic."},
+  ]},
+  "Balancing equations (2nd session)": { label:"Wk 6 · Tue 5 May", qs:[
+    {q:"Balance: Fe + O₂ → Fe₂O₃",
+     a:"4Fe + 3O₂ → 2Fe₂O₃."},
+    {q:"What is an ionic equation?",
+     a:"An equation showing only the ions that change during the reaction — spectator ions are cancelled out."},
+    {q:"Write the half equation for copper deposition at the cathode.",
+     a:"Cu²⁺ + 2e⁻ → Cu."},
+    {q:"Write the half equation for chlorine production at the anode.",
+     a:"2Cl⁻ → Cl₂ + 2e⁻."},
+    {q:"Balance: C₃H₈ + O₂ → CO₂ + H₂O",
+     a:"C₃H₈ + 5O₂ → 3CO₂ + 4H₂O."},
+  ]},
+  "Rates of reaction calculations": { label:"Wk 7 · Wed 13 May", qs:[
+    {q:"What is the formula for rate of reaction?",
+     a:"Rate = quantity (volume or mass) ÷ time. Or rate = 1 ÷ time taken."},
+    {q:"Name FOUR factors that increase the rate of reaction.",
+     a:"Temperature, concentration (or pressure for gases), surface area, and catalyst."},
+    {q:"How does increasing temperature increase rate? (use collision theory)",
+     a:"Higher temperature gives particles more kinetic energy — faster movement means more frequent collisions AND more exceed the activation energy."},
+    {q:"In a rate experiment, 48 cm³ of gas is collected in 60 seconds. What is the rate?",
+     a:"Rate = 48 ÷ 60 = 0.8 cm³/s."},
+    {q:"What does the gradient of a rate graph represent?",
+     a:"The rate of reaction at that point. Steeper gradient = faster rate."},
+  ]},
+  "Organic chemistry": { label:"Wk 8 · Sun 24 May", qs:[
+    {q:"What is the general formula for alkanes?",
+     a:"CₙH₂ₙ₊₂. They are saturated hydrocarbons with only single C–C bonds."},
+    {q:"How do you test for an alkene?",
+     a:"Add bromine water — it decolourises from orange/brown to colourless if a C=C double bond is present."},
+    {q:"What is cracking and why is it used?",
+     a:"Breaking large hydrocarbon molecules into smaller, more useful ones using heat and a catalyst. Produces alkenes and fuels."},
+    {q:"What are the products of complete combustion of a hydrocarbon?",
+     a:"Carbon dioxide and water. (Incomplete combustion also produces carbon monoxide and/or soot.)"},
+    {q:"What is addition polymerisation?",
+     a:"Many alkene monomers join together via their C=C double bonds to form a long polymer chain. E.g. ethene → poly(ethene)."},
+  ]},
+  "Rates of reaction calculations (2nd session)": { label:"Wk 9 · Wed 27 May", qs:[
+    {q:"Why does increasing surface area increase reaction rate?",
+     a:"More particles are exposed at the surface, giving more opportunities for successful collisions."},
+    {q:"What is a catalyst?",
+     a:"A substance that increases reaction rate without being used up. It provides an alternative pathway with lower activation energy."},
+    {q:"In an experiment, 24 cm³ of gas is collected in 40 seconds. What is the rate?",
+     a:"Rate = 24 ÷ 40 = 0.6 cm³/s."},
+    {q:"Why does rate decrease over time in a typical rate experiment?",
+     a:"Reactants are used up, so concentration falls — fewer successful collisions per second."},
+    {q:"What shape is a typical volume vs time graph for a rate experiment?",
+     a:"A curve that starts steep (fast rate) and flattens off when a reactant is used up."},
+  ]},
+  "Required practicals": { label:"Wk 10 · Mon 1 Jun", qs:[
+    {q:"In the titration practical, what is the purpose of the indicator?",
+     a:"To show when the acid and alkali have exactly neutralised (the endpoint) by changing colour."},
+    {q:"Why is a polystyrene cup used in temperature change experiments?",
+     a:"Polystyrene is an insulator — it reduces heat loss to the surroundings, giving more accurate readings."},
+    {q:"In the chromatography practical, why must ink spots be above the solvent level?",
+     a:"If below, ink dissolves directly into the solvent rather than being carried up the paper."},
+    {q:"How do you test for chlorine at the anode in electrolysis?",
+     a:"Hold damp litmus paper near the anode — chlorine bleaches (decolourises) it."},
+    {q:"Why is it important to repeat measurements in a rate of reaction practical?",
+     a:"To identify anomalous results and calculate a mean, improving reliability."},
+  ]},
+  "Chemical analysis": { label:"Wk 11 · Mon 8 Jun", qs:[
+    {q:"What colour flame does sodium produce?",
+     a:"Yellow/orange."},
+    {q:"What precipitate does Cu²⁺ form when NaOH solution is added?",
+     a:"A blue precipitate (copper hydroxide)."},
+    {q:"How do you test for carbon dioxide?",
+     a:"Bubble it through limewater — it turns milky/cloudy."},
+    {q:"What is the formula for Rf value in chromatography?",
+     a:"Rf = distance moved by substance ÷ distance moved by solvent front."},
+    {q:"How do you test for hydrogen gas?",
+     a:"Hold a lit splint near the gas — it produces a squeaky pop."},
+  ]},
+},
+
+"Economics": {
+  "Supply & demand": { label:"Wk 1 · Tue 31 Mar", qs:[
+    {q:"What happens to quantity demanded when price rises (all else equal)?",
+     a:"It falls — inverse relationship between price and quantity demanded (law of demand)."},
+    {q:"Name THREE factors that shift the demand curve to the right.",
+     a:"Rise in income (normal good), rise in price of a substitute, fall in price of a complement."},
+    {q:"Name TWO factors that shift the supply curve to the left.",
+     a:"Rise in production costs, new taxes on producers, adverse weather."},
+    {q:"What is the equilibrium price?",
+     a:"The price at which quantity demanded equals quantity supplied — the market clears with no surplus or shortage."},
+    {q:"What does ceteris paribus mean?",
+     a:"All other things equal — we isolate the effect of one variable by holding all others constant."},
+  ]},
+  "Market structures": { label:"Wk 2 · Tue 7 Apr", qs:[
+    {q:"What is a negative externality? Give an example.",
+     a:"A cost imposed on a third party not involved in the transaction. E.g. factory pollution affecting local residents."},
+    {q:"How can a government correct a negative externality?",
+     a:"Impose a tax equal to the external cost (Pigouvian tax), shifting supply left and reducing over-production."},
+    {q:"What is market failure?",
+     a:"When the free market does not allocate resources efficiently — e.g. due to externalities, public goods, or monopoly power."},
+    {q:"What is a positive externality? Give an example.",
+     a:"A benefit falling on a third party. E.g. education — society benefits from a more skilled workforce."},
+    {q:"What is monopoly power?",
+     a:"When a single firm dominates a market and can set prices above competitive levels, reducing consumer surplus."},
+  ]},
+  "Macro indicators": { label:"Wk 3 · Mon 13 Apr", qs:[
+    {q:"What does GDP measure?",
+     a:"Gross Domestic Product: the total value of all goods and services produced in a country in one year."},
+    {q:"What is a recession?",
+     a:"Two consecutive quarters of negative GDP growth."},
+    {q:"What causes demand-pull inflation?",
+     a:"Too much spending chasing too few goods — often during a boom when aggregate demand is high."},
+    {q:"What causes cost-push inflation?",
+     a:"Rising input costs (energy, wages, raw materials) push up production costs and hence prices."},
+    {q:"Name the two main types of unemployment.",
+     a:"Cyclical (caused by recession/fall in demand) and Structural (skills mismatch as industries decline)."},
+  ]},
+  "International trade": { label:"Wk 4 · Mon 20 Apr", qs:[
+    {q:"What is comparative advantage?",
+     a:"The ability to produce a good at a lower opportunity cost than another country — the basis for mutually beneficial trade."},
+    {q:"What is a tariff?",
+     a:"A tax on imported goods, making them more expensive and protecting domestic producers — but raises prices for consumers."},
+    {q:"How does a weaker pound affect UK exports?",
+     a:"Exports become cheaper for foreign buyers, so demand for UK exports rises — helps the current account."},
+    {q:"What is a current account deficit?",
+     a:"When a country imports more goods and services than it exports — money flows out of the country."},
+    {q:"Name ONE benefit and ONE drawback of free trade.",
+     a:"Benefit: lower prices for consumers. Drawback: can destroy domestic industries unable to compete."},
+  ]},
+  "Fiscal policy": { label:"Wk 4 · Sun 26 Apr", qs:[
+    {q:"What is fiscal policy?",
+     a:"Government decisions on taxation and public spending to manage the economy."},
+    {q:"What is expansionary fiscal policy?",
+     a:"Increasing government spending and/or cutting taxes to stimulate demand and GDP growth."},
+    {q:"What is a budget deficit?",
+     a:"When government spending exceeds tax revenue in a given year."},
+    {q:"What is the multiplier effect?",
+     a:"An initial injection of spending leads to a larger overall increase in national income, as money circulates through the economy."},
+    {q:"Name ONE risk of expansionary fiscal policy.",
+     a:"Higher government borrowing leads to a larger national debt, requiring future tax rises or spending cuts to service it."},
+  ]},
+  "Elasticity calculations": { label:"Wk 5 · Thu 30 Apr", qs:[
+    {q:"What is the formula for PED?",
+     a:"PED = % change in quantity demanded ÷ % change in price."},
+    {q:"PED = −0.3. What does this tell you?",
+     a:"Demand is price inelastic (|PED| < 1). A price rise will increase total revenue."},
+    {q:"PED = −2.5. What does this tell you?",
+     a:"Demand is price elastic (|PED| > 1). A price rise will decrease total revenue."},
+    {q:"What is the formula for YED?",
+     a:"YED = % change in quantity demanded ÷ % change in income."},
+    {q:"YED = −0.6. What type of good is this?",
+     a:"An inferior good — demand falls as income rises."},
+  ]},
+  "Monetary policy": { label:"Wk 7 · Thu 14 May", qs:[
+    {q:"Who sets UK interest rates and what is their inflation target?",
+     a:"The Bank of England's Monetary Policy Committee (MPC). Target: 2% CPI."},
+    {q:"How does a rise in interest rates reduce inflation?",
+     a:"Higher borrowing costs reduce consumer spending and business investment, lowering aggregate demand and cooling price rises."},
+    {q:"What is quantitative easing (QE)?",
+     a:"The Bank of England creates money to buy government bonds, injecting liquidity into the economy to stimulate spending."},
+    {q:"Name ONE limitation of raising interest rates.",
+     a:"Time lag of 6–18 months before full effect is felt. Also hits mortgage holders and businesses hardest."},
+    {q:"If inflation is caused by a supply shock, why might raising rates be ineffective?",
+     a:"Rate rises only reduce demand-pull inflation. Cost-push from supply shocks (e.g. energy prices) is not addressed by reducing demand."},
+  ]},
+},
+
+"English Lang": {
+  "Reading fiction": { label:"Wk 1 · Wed 1 Apr", qs:[
+    {q:"What should you look for when analysing language in a fiction extract?",
+     a:"Specific word choices, metaphors, similes, personification, sentence structure, repetition, alliteration — and the effect each creates on the reader."},
+    {q:"What is the difference between explicit and implicit meaning?",
+     a:"Explicit: directly stated. Implicit: suggested or implied — you need to infer it."},
+    {q:"What is the effect of short sentences in fiction?",
+     a:"They create pace, tension, or emphasis. A series of short sentences can mirror shock, urgency or action."},
+    {q:"What does 'narrative perspective' mean?",
+     a:"The point of view from which the story is told — first person (I/we), second (you), or third person (he/she/they)."},
+    {q:"How should you embed a quote in your analysis?",
+     a:"Weave it into your own sentence: 'The writer's use of the word \"loomed\" creates...' — never just drop it in separately."},
+  ]},
+  "Reading non-fiction": { label:"Wk 2 · Tue 7 Apr", qs:[
+    {q:"Name FOUR persuasive techniques used in non-fiction writing.",
+     a:"Rhetorical questions, direct address (you/we), statistics, emotive language, rule of three, anecdote."},
+    {q:"What is the purpose of a rhetorical question?",
+     a:"To engage the reader and make them think — it implies an answer without explicitly stating it."},
+    {q:"What should a summary comparison of two non-fiction texts include?",
+     a:"Key differences/similarities in content and viewpoint, with evidence from both texts. Use 'whereas', 'in contrast', 'similarly'."},
+    {q:"What does 'register' mean?",
+     a:"The level of formality — formal (e.g. broadsheet) vs informal (e.g. blog). Should match audience and purpose."},
+    {q:"How is analysing non-fiction language different from fiction?",
+     a:"Non-fiction focuses on persuasive/rhetorical techniques, purpose, and how the writer positions the reader — not just imagery."},
+  ]},
+  "Writing to describe": { label:"Wk 3 · Tue 14 Apr", qs:[
+    {q:"What is the key difference between narrative and descriptive writing?",
+     a:"Narrative tells a story with events and plot. Descriptive writing creates a vivid picture — it may have little action."},
+    {q:"Name THREE techniques to make description more vivid.",
+     a:"Use all five senses, use precise vocabulary (e.g. 'trudged' not 'walked slowly'), and vary sentence length for rhythm."},
+    {q:"What does 'show, don't tell' mean?",
+     a:"Instead of stating an emotion directly, show it through action or sensation: 'Her hands pressed flat against the door' rather than 'She was scared.'"},
+    {q:"Why should a student vary sentence length in descriptive writing?",
+     a:"To create rhythm and mood — short sentences create pace/emphasis; long sentences create atmosphere or reflective tone."},
+    {q:"What is a semantic field and how can it strengthen a description?",
+     a:"A cluster of words from the same area (e.g. all natural, all urban). A consistent semantic field creates a sustained atmosphere."},
+  ]},
+  "Writing to argue": { label:"Wk 4 · Mon 20 Apr", qs:[
+    {q:"What does AFOREST stand for?",
+     a:"Anecdote, Facts & figures, Opinion, Rhetorical question, Emotive language, Statistics, Tripling (rule of three)."},
+    {q:"What is a counter-argument and why include one?",
+     a:"Acknowledging the opposing view — then refuting it. Shows sophisticated thinking and makes the argument more convincing."},
+    {q:"What is the purpose of a tricolon (rule of three)?",
+     a:"Three parallel words or phrases create rhythm, emphasis and memorability: 'quickly, decisively, and together.'"},
+    {q:"How should the closing paragraph of a persuasive piece work?",
+     a:"Land with impact — return to the opening theme, call to action, or leave a memorable final image. Not just a summary."},
+    {q:"How should the opening paragraph of a persuasive piece work?",
+     a:"Hook the reader (striking statement, statistic or question), state your position clearly, establish your voice/tone."},
+  ]},
+  "Language techniques": { label:"Wk 5 · Mon 27 Apr", qs:[
+    {q:"What is sibilance and what effect can it create?",
+     a:"Repeated 's' sounds. Can create soft, whispering, sinister, or unsettling atmosphere depending on context."},
+    {q:"What is enjambment and what effect does it create?",
+     a:"A line running on without pause to the next. Creates momentum, restlessness, urgency — mirrors the poem's content."},
+    {q:"What is a caesura?",
+     a:"A pause mid-line created by punctuation. Creates emphasis, hesitation, or sudden break — mirrors shock or reflection."},
+    {q:"What is personification?",
+     a:"Giving human qualities to a non-human thing — 'The wind screamed.' Makes nature or objects feel alive or threatening."},
+    {q:"What is juxtaposition and why do writers use it?",
+     a:"Placing contrasting ideas or images side by side to highlight the difference — forces the reader to hold the tension between opposites."},
+  ]},
+  "Structure analysis (Q3)": { label:"Wk 6 · Mon 4 May", qs:[
+    {q:"What is the difference between language analysis and structure analysis?",
+     a:"Language: specific word choices and techniques. Structure: how the whole text is organised — shifts in focus, pacing, perspective, what is revealed when."},
+    {q:"Name FOUR structural features you can comment on.",
+     a:"Narrative perspective, time shifts (flashback/forward), focus shifts (wide to close-up), pacing, withholding information, cyclical structure."},
+    {q:"What effect does starting mid-action (in medias res) have?",
+     a:"Immediately grips the reader — they're dropped into an event with no context, creating intrigue."},
+    {q:"How does pacing affect the reader?",
+     a:"Short sentences + rapid events = fast pace, tension. Long sentences + description = slow pace, reflection or atmosphere."},
+    {q:"What should every structural analysis paragraph include?",
+     a:"The structural feature, where it occurs in the text, the effect on the reader, and how it develops or changes through the text."},
+  ]},
+  "Evaluation skills (Q4)": { label:"Wk 7 · Tue 12 May", qs:[
+    {q:"What is the key difference between analysis and evaluation?",
+     a:"Analysis explains HOW a technique works. Evaluation judges HOW EFFECTIVELY it achieves the writer's purpose."},
+    {q:"Give THREE sentence starters for an evaluative response.",
+     a:"'To a great extent...', 'The most convincing evidence is...', 'However, this is complicated by...'"},
+    {q:"What should a high-level Q4 response do that a low-level one doesn't?",
+     a:"Weigh evidence, consider whether the statement is fully or only partially true, engage with nuances, and reach a clear personal judgement."},
+    {q:"Why is personal response important in Q4?",
+     a:"AQA rewards an 'informed personal response' — you should express your own reading of the text, not just describe what happens."},
+    {q:"What does it mean to 'evaluate' a writer's methods?",
+     a:"To judge how successfully the writer uses language, structure and form to achieve their intended effect — not just identify techniques."},
+  ]},
+  "Narrative writing with impact": { label:"Wk 8 · Tue 19 May", qs:[
+    {q:"What is the most important thing to do before starting a creative writing response?",
+     a:"Spend 5 minutes planning: angle, narrative perspective, 3–4 key moments, opening line, and ending."},
+    {q:"What makes a strong opening line for a story?",
+     a:"Something unexpected — start mid-action, with dialogue, a striking image, or a single short sentence that creates intrigue."},
+    {q:"What is the difference between grade 4 and grade 6 creative writing?",
+     a:"Grade 4 lists events. Grade 6 uses deliberate, named techniques — varied sentence length, show don't tell, precise vocabulary, structural choices."},
+    {q:"What does 'show, don't tell' mean in narrative writing?",
+     a:"Don't state emotions: 'He was angry.' Show through action or sensation: 'He pressed his knuckles white against the table.'"},
+    {q:"Why is the ending of a story so important?",
+     a:"It's the last thing the examiner reads — it should feel deliberate. Cyclical, ambiguous, or a quiet moment of change all work well."},
+  ]},
+  "Vocabulary & SPaG": { label:"Wk 9 · Tue 26 May", qs:[
+    {q:"What is a comma splice and how do you fix it?",
+     a:"Two sentences joined with only a comma. Fix: full stop, semicolon, or conjunction: 'He ran, but the door was locked.'"},
+    {q:"Give FOUR better alternatives to the word 'said'.",
+     a:"Whispered, muttered, hissed, declared, retorted, snapped, breathed (any four)."},
+    {q:"What is the rule for 'its' vs 'it's'?",
+     a:"It's = it is (contraction). Its = belonging to it (possessive). 'The cat licked its paw. It's raining.'"},
+    {q:"Why is paragraph discipline important?",
+     a:"Each paragraph = one idea. No indentation = no paragraphs = marks lost for organisation."},
+    {q:"Name THREE common SPaG errors to eliminate.",
+     a:"Comma splices, inconsistent tense, and missing apostrophes in contractions (it's, don't, they're)."},
+  ]},
+  "Vocabulary & SPaG (2nd session)": { label:"Wk 10 · Wed 3 Jun", qs:[
+    {q:"Give FOUR precise alternatives to the word 'walked'.",
+     a:"Shuffled, trudged, sauntered, strode, crept, staggered, marched, drifted (any four)."},
+    {q:"What is the difference between 'there', 'their' and 'they're'?",
+     a:"'There' = place/exists. 'Their' = belonging to them. 'They're' = they are."},
+    {q:"What is inconsistent tense and why is it a problem?",
+     a:"Switching between past and present tense within a piece — confuses the reader and loses technical accuracy marks."},
+    {q:"What should you do in the last 3 minutes of a writing question?",
+     a:"Read back through: full stops at sentence ends, apostrophes correct, paragraphs indented, consistent tense, no comma splices."},
+    {q:"What is a run-on sentence and how do you fix it?",
+     a:"A sentence continuing too long without punctuation. Break into shorter sentences or add a semicolon at a natural pause."},
+  ]},
+},
+
+"English Lit": {
+  "An Inspector Calls": { label:"Wk 1 · Wed 1 Apr", qs:[
+    {q:"What is the significance of the Inspector's name 'Goole'?",
+     a:"It sounds like 'Ghoul' — he may be supernatural, a ghost, or Priestley's moral mouthpiece. He is not a real inspector."},
+    {q:"What is dramatic irony in An Inspector Calls?",
+     a:"Birling's confident wrong predictions (Titanic, no war) make him look foolish to the 1945 audience who knows both were catastrophically wrong."},
+    {q:"What does 'We are responsible for each other' mean in context?",
+     a:"The Inspector's (Priestley's) central thesis — a socialist argument for collective responsibility, written 1945 in support of the welfare state."},
+    {q:"How do Eric and Sheila differ from their parents?",
+     a:"They accept responsibility and change. The parents refuse blame. Priestley uses this to show the younger generation's capacity for moral growth."},
+    {q:"What does Eva Smith represent?",
+     a:"All exploited working-class people. Eva (everyman/first woman) + Smith (common working-class surname)."},
+  ]},
+  "Macbeth": { label:"Wk 2 · Wed 8 Apr", qs:[
+    {q:"What does 'Fair is foul, and foul is fair' mean?",
+     a:"The Witches' paradox — appearances are deceptive throughout. Macbeth appears loyal while planning murder; Lady Macbeth appears strong but collapses."},
+    {q:"What does Macbeth's Act 1 Sc 7 soliloquy reveal?",
+     a:"Self-awareness — he knows killing Duncan is wrong. The horse metaphor ('vaulting ambition') shows ambition as his sole motivation."},
+    {q:"What is the significance of Lady Macbeth's sleepwalking?",
+     a:"Psychological collapse — guilt she dismissed ('A little water clears us of this deed') destroys her. 'Out, damned spot!' is guilt made physical."},
+    {q:"How does Jacobean context explain the Witches?",
+     a:"James I believed in witchcraft (wrote Daemonologie). Witchcraft was punishable by death — the Witches would genuinely terrify a Jacobean audience."},
+    {q:"What does Duncan's murder represent beyond a personal crime?",
+     a:"Regicide — killing a king was both murder and blasphemy under divine right of kings. It upsets the natural order, mirrored in chaos in nature."},
+  ]},
+  "Power & conflict poetry": { label:"Wk 3 · Tue 14 Apr", qs:[
+    {q:"In Ozymandias, what does 'Nothing beside remains' suggest?",
+     a:"All of Ozymandias's power has crumbled to nothing. The boast 'Look on my works' is undermined — the works are gone. Power is temporary."},
+    {q:"In Exposure, what is the effect of 'But nothing happens'?",
+     a:"Emphasises futility — the horror is the absence of action. Men die of cold without fighting. The real enemy is the weather."},
+    {q:"In Remains, how is PTSD portrayed?",
+     a:"Through fractured, colloquial language ('his hands are under my eyelids'). The dead man's body haunts every moment of the soldier's life."},
+    {q:"In Checking Out Me History, what is the political significance of the dialect?",
+     a:"Agard deliberately uses Creole — refusing the coloniser's language is an act of resistance and identity reclamation."},
+    {q:"In War Photographer, what does the darkroom symbolise?",
+     a:"Processing trauma — both literally (developing images) and metaphorically (confronting what was witnessed in war zones)."},
+  ]},
+  "Unseen poetry technique": { label:"Wk 4 · Tue 21 Apr", qs:[
+    {q:"What does SMILE stand for in unseen poetry analysis?",
+     a:"Structure, Meaning, Imagery, Language, Effect on reader."},
+    {q:"What is a volta in a poem?",
+     a:"The 'turn' — a shift in tone, argument, or perspective. Often at line 9 in a sonnet."},
+    {q:"What is enjambment and what effect can it create?",
+     a:"A line running on without pause to the next. Creates momentum, restlessness, urgency."},
+    {q:"How should you start a comparison of two unseen poems?",
+     a:"Introduce both poems and the shared theme in the opening. Then alternate using 'Similarly...', 'In contrast...', 'Both poets...'"},
+    {q:"What is a semantic field? Give an example.",
+     a:"A group of words from the same area — e.g. all military ('march', 'battle', 'command'). Creates thematic emphasis."},
+  ]},
+  "Essay structure under timed conditions": { label:"Wk 5 · Tue 28 Apr", qs:[
+    {q:"What should the opening paragraph of a literature essay include?",
+     a:"Name the text and author, address the question directly, state your main argument, briefly introduce evidence."},
+    {q:"What does a high-level analytical paragraph look like?",
+     a:"Point → specific embedded quote → technique named → effect on reader → link to theme/context."},
+    {q:"What is the difference between describing and analysing a quote?",
+     a:"Description: 'Macbeth says he has ambition.' Analysis: 'The word \"vaulting\" suggests ungoverned ambition likely to overreach — foreshadowing his fall.'"},
+    {q:"Why should you embed quotes rather than block-quote?",
+     a:"Embedded quotes show analytical control — you weave evidence into argument. Block quotes suggest padding."},
+    {q:"What should the concluding paragraph do?",
+     a:"Bring together the main threads, restate your overall judgement in new words, and end with a point that feels final and deliberate."},
+  ]},
+  "Language analysis": { label:"Wk 6 · Tue 5 May", qs:[
+    {q:"What is the effect of a metaphor compared to a simile?",
+     a:"A metaphor (A IS B) is more direct and forceful — completely equates two things. A simile (like/as) is more tentative, inviting comparison."},
+    {q:"What does 'tone' mean in literary analysis?",
+     a:"The speaker's or writer's attitude/mood — angry, elegiac, celebratory, bitter, ironic. Show HOW the language creates it."},
+    {q:"What is the effect of repetition in a literary text?",
+     a:"Emphasises importance, creates insistence or obsession — e.g. Lady Macbeth's 'Out, damned spot!' mirrors psychological breakdown."},
+    {q:"What is an extended metaphor?",
+     a:"A metaphor developed across multiple lines or the whole text — creates sustained depth of meaning and thematic coherence."},
+    {q:"Why should you analyse specific words rather than whole quotes?",
+     a:"Zooming in on individual word choices (connotations, register) shows close reading — what distinguishes grade 5 from grade 7+."},
+  ]},
+  "Essay structure under timed conditions (2nd session)": { label:"Wk 7 · Sun 17 May", qs:[
+    {q:"What is AO2 in English Literature?",
+     a:"Analysis of the writer's language, form and structure — HOW the writer creates meaning, not just WHAT they say."},
+    {q:"What is AO3 in English Literature?",
+     a:"Context — understanding how historical, social or cultural factors shape meaning. NOT retelling the author's biography."},
+    {q:"How can you use context without it feeling 'bolted on'?",
+     a:"Link directly to the quote: 'A Jacobean audience, for whom regicide was blasphemy, would understand Macbeth's horror.'"},
+    {q:"Give THREE evaluative phrases for a literature essay.",
+     a:"'Arguably...', 'Perhaps most significantly...', 'While X is true, it is complicated by...'"},
+    {q:"Why name the writer rather than the character?",
+     a:"It shows choices are deliberate — 'Priestley uses Birling to...' not 'Birling says...' Signals AO2 awareness."},
+  ]},
+},
+
+"Further Maths": {
+  "Algebra & graphs": { label:"Wk 9 · Mon 25 May", qs:[
+    {q:"What is the effect of the transformation y = f(x + 3)?",
+     a:"Translates the graph LEFT by 3 units. Inside the brackets, +3 shifts left (counter-intuitive)."},
+    {q:"How do you solve a quadratic inequality x² − 5x + 6 > 0?",
+     a:"Factorise: (x−2)(x−3) > 0. Sketch the parabola. For > 0 (positive parabola), answer is OUTSIDE the roots: x < 2 or x > 3."},
+    {q:"What are partial fractions?",
+     a:"Expressing a fraction as a sum of simpler fractions: A/(x+a) + B/(x+b). Multiply through by the LCM and substitute roots to find A and B."},
+    {q:"What does the factor theorem state?",
+     a:"If f(a) = 0, then (x−a) is a factor of f(x). Use to factorise cubic and higher-degree polynomials."},
+    {q:"What does the remainder theorem state?",
+     a:"When f(x) is divided by (x−a), the remainder is f(a). Useful for finding remainders without long division."},
+  ]},
+  "Matrices": { label:"Wk 9 · Sun 31 May", qs:[
+    {q:"What is the determinant of a 2×2 matrix [[a,b],[c,d]]?",
+     a:"det = ad − bc. If det = 0, the matrix is singular and has no inverse."},
+    {q:"Write the formula for the inverse of a 2×2 matrix [[a,b],[c,d]].",
+     a:"A⁻¹ = (1/det) × [[d,−b],[−c,a]]. Swap the diagonal, negate the off-diagonal, divide by det."},
+    {q:"Why does matrix multiplication order matter?",
+     a:"It is not commutative — AB ≠ BA in general. To apply transformation A then B, the combined matrix is BA (right to left)."},
+    {q:"What does a singular matrix mean geometrically?",
+     a:"The transformation collapses the 2D plane onto a line. All area is destroyed — the determinant (area scale factor) is 0."},
+    {q:"Write the rotation matrix for 90° anticlockwise.",
+     a:"[[0, −1], [1, 0]]."},
+  ]},
+  "Complex numbers": { label:"Wk 10 · Thu 4 Jun", qs:[
+    {q:"What is i?",
+     a:"i = √(−1), so i² = −1. A complex number z = a + bi where a is the real part and b is the imaginary part."},
+    {q:"How do you divide complex numbers, e.g. (3+2i)/(1−i)?",
+     a:"Multiply numerator and denominator by the conjugate of the denominator (1+i). The denominator becomes (1)²+(1)² = 2 (real)."},
+    {q:"What is the modulus of z = 3 − 4i?",
+     a:"|z| = √(3² + 4²) = √25 = 5."},
+    {q:"What is the complex conjugate?",
+     a:"If z = a + bi, then z* = a − bi. Key: z × z* = a² + b² (always real)."},
+    {q:"If a quadratic has real coefficients and one root is 2+3i, what is the other root?",
+     a:"The conjugate: 2−3i. Complex roots of polynomials with real coefficients always come in conjugate pairs."},
+  ]},
+  "Series & sequences": { label:"Wk 11 · Wed 10 Jun", qs:[
+    {q:"What is the formula for the sum of an arithmetic series?",
+     a:"Sₙ = n/2 × (2a + (n−1)d) = n/2 × (first + last). Where a = first term, d = common difference."},
+    {q:"What is the formula for sum to infinity of a geometric series?",
+     a:"S = a/(1−r). Only valid when |r| < 1 (the series converges)."},
+    {q:"State the three steps of proof by induction.",
+     a:"1. Base case (n=1). 2. Assume true for n=k, show true for n=k+1. 3. Conclude: by PMI, true for all positive integers n."},
+    {q:"What is the standard result for Σr from r=1 to n?",
+     a:"n(n+1)/2."},
+    {q:"In the binomial expansion of (1+x)ⁿ, when is the expansion valid?",
+     a:"When |x| < 1 — for non-integer n, the series is infinite and only converges within this range."},
+  ]},
+},
+
+"Geography": {
+  "Natural world": { label:"Wk 1 · Thu 2 Apr", qs:[
+    {q:"What is longshore drift?",
+     a:"Movement of sediment along a coast by waves hitting at an angle — swash carries material up at an angle, backwash pulls it straight back down."},
+    {q:"Name the sequence of erosional landforms from headland.",
+     a:"Headland → cave → arch → stack → stump."},
+    {q:"What is the difference between constructive and destructive waves?",
+     a:"Constructive: low frequency, strong swash — build beaches. Destructive: high frequency, strong backwash — erode coastlines."},
+    {q:"What causes a waterfall to form?",
+     a:"Resistant rock overlies softer rock. Soft rock is undercut, overhang collapses, and the waterfall retreats upstream forming a gorge."},
+    {q:"Name TWO physical causes of river flooding.",
+     a:"Heavy or prolonged rainfall, and impermeable bedrock (prevents infiltration, increases surface runoff)."},
+  ]},
+  "Fieldwork & enquiry skills": { label:"Wk 2 · Wed 8 Apr", qs:[
+    {q:"What is the difference between primary and secondary data?",
+     a:"Primary: collected by the student in the field. Secondary: existing data from other sources (census, OS maps, government stats)."},
+    {q:"Name THREE sampling methods.",
+     a:"Random (no bias), systematic (regular intervals), stratified (proportional to sub-groups in population)."},
+    {q:"What makes results reliable?",
+     a:"Repeatable (same method gives same results) and reproducible (different researchers get same results)."},
+    {q:"What is an anomalous result?",
+     a:"A result that doesn't fit the expected pattern — it should be identified and usually excluded from the mean."},
+    {q:"Suggest ONE specific way to improve reliability of a questionnaire survey.",
+     a:"Increase sample size (e.g. 10 to 30) to make results more representative of the population being studied."},
+  ]},
+  "People & society": { label:"Wk 3 · Wed 15 Apr", qs:[
+    {q:"What is urbanisation?",
+     a:"The increase in the proportion of a country's population living in urban areas."},
+    {q:"Name TWO push and TWO pull factors for rural-urban migration.",
+     a:"Push: poverty, lack of jobs, drought. Pull: employment opportunities, better services, education."},
+    {q:"What is a squatter settlement?",
+     a:"Informal housing built by migrants on land they don't own, lacking legal status, sanitation and infrastructure."},
+    {q:"What is an HDI and what does it measure?",
+     a:"Human Development Index — a composite measure combining income (GNI per capita), education, and life expectancy. Ranges 0–1."},
+    {q:"What is counter-urbanisation?",
+     a:"The movement of people from cities to rural areas — common in HICs as people seek better quality of life."},
+  ]},
+  "Fieldwork & enquiry skills (2nd session)": { label:"Wk 4 · Wed 22 Apr", qs:[
+    {q:"What is a hypothesis?",
+     a:"A testable prediction: 'If [independent variable] changes, then [dependent variable] will... because...'"},
+    {q:"What is bias in data collection?",
+     a:"A systematic distortion — e.g. surveying only in the morning misses different groups and skews results."},
+    {q:"What is the difference between accuracy and precision?",
+     a:"Accuracy: how close to the true value. Precision: how consistent/repeatable the measurements are."},
+    {q:"Does correlation prove causation?",
+     a:"No — correlation shows a relationship between two variables, but does not prove that one causes the other."},
+    {q:"How should a line of best fit be drawn on a scatter graph?",
+     a:"A straight line through the trend of data points, with roughly equal numbers of points each side. May or may not pass through the origin."},
+  ]},
+  "Case study specifics": { label:"Wk 5 · Wed 29 Apr", qs:[
+    {q:"Name a coastal management case study and state ONE hard engineering method used.",
+     a:"E.g. Lyme Regis, Dorset — sea walls, groynes, rock armour. Phase 3 cost approx £20 million."},
+    {q:"Name a river flooding case study and ONE cause.",
+     a:"E.g. River Severn/Shrewsbury — Storm Dennis (Feb 2020), impermeable bedrock, deforestation in catchment."},
+    {q:"Name a tectonic hazard case study with a key statistic.",
+     a:"E.g. Nepal earthquake, April 2015 — magnitude 7.8, ~9,000 deaths, 3.5 million homeless, USD 10 billion damage."},
+    {q:"Name an LIC or NEE city and ONE urban challenge.",
+     a:"E.g. Mumbai, India — Dharavi slum houses ~1 million people in 2 km² with inadequate sanitation."},
+    {q:"What does SLEED stand for in geography answers?",
+     a:"Social, Locational, Economic, Environmental, Data — the five elements of a strong case study answer."},
+  ]},
+  "OS map & graph skills": { label:"Wk 6 · Wed 6 May", qs:[
+    {q:"How do you give a 6-figure grid reference?",
+     a:"Eastings first (2 digits + tenths), Northings second (2 digits + tenths). Along the corridor, then up the stairs."},
+    {q:"What do closely spaced contour lines indicate?",
+     a:"A steep slope. Widely spaced = gentle slope."},
+    {q:"On a 1:50,000 OS map, how far does 2 cm represent?",
+     a:"1 km (1 cm = 500 m, so 2 cm = 1000 m = 1 km)."},
+    {q:"What is the formula for percentage change?",
+     a:"% change = (new − old) ÷ old × 100. Negative answer = decrease."},
+    {q:"What is a choropleth map?",
+     a:"A map using shading or colour to show variation in data across areas — darker usually means higher values."},
+  ]},
+  "OS map & graph skills (2nd session)": { label:"Wk 9 · Wed 27 May", qs:[
+    {q:"What does a V-shaped contour pointing uphill indicate on an OS map?",
+     a:"A valley (river). A V-shape pointing downhill indicates a ridge."},
+    {q:"How do you read a 4-figure grid reference?",
+     a:"Easting (2 digits) first, then northing (2 digits). Identifies a 1 km square."},
+    {q:"A town's population was 12,000 in 2010 and 15,600 in 2020. Calculate the % change.",
+     a:"% change = (15,600−12,000) ÷ 12,000 × 100 = 3,600 ÷ 12,000 × 100 = 30% increase."},
+    {q:"What type of graph is best for showing change over time?",
+     a:"A line graph. Bar charts are better for comparing discrete categories."},
+    {q:"What is a scatter graph used for?",
+     a:"To show the relationship (correlation) between two variables — positive, negative, or no correlation."},
+  ]},
+  "Climate & rivers": { label:"Wk 8 · Thu 21 May", qs:[
+    {q:"What is the difference between mitigation and adaptation (climate change)?",
+     a:"Mitigation: reducing the causes (e.g. cutting emissions). Adaptation: responding to the effects (e.g. flood defences)."},
+    {q:"What is a meander and how does it form?",
+     a:"A bend in a river. Fastest flow on the outside erodes a river cliff; slowest flow on the inside deposits a slip-off slope."},
+    {q:"What is an ox-bow lake?",
+     a:"A cut-off meander formed when a river breaches a narrow neck during flood and sediment seals off the old channel."},
+    {q:"Name TWO human causes of river flooding.",
+     a:"Urbanisation (impermeable surfaces increase runoff) and deforestation (less interception and infiltration)."},
+    {q:"Name TWO causes of climate change (one natural, one human).",
+     a:"Natural: Milankovitch cycles / volcanic eruptions. Human: burning fossil fuels (CO₂) / deforestation."},
+  ]},
+  "Key terminology & definitions": { label:"Wk 11 · Tue 9 Jun", qs:[
+    {q:"Define sustainability.",
+     a:"Meeting the needs of the present without compromising the ability of future generations to meet their own needs."},
+    {q:"Define globalisation.",
+     a:"The process by which the world is becoming increasingly interconnected through trade, communication, migration and culture."},
+    {q:"What is interdependence?",
+     a:"The way countries, people and environments depend on each other — e.g. through trade and global supply chains."},
+    {q:"What is a TNC?",
+     a:"Transnational Corporation — a company operating in more than one country. E.g. Nike, Unilever."},
+    {q:"What is deprivation?",
+     a:"A state of lacking basic necessities — used to measure quality of life, particularly in urban areas."},
+  ]},
+},
+
+"Maths": {
+  "Algebra & algebraic proof": { label:"Wk 1 · Thu 2 Apr", qs:[
+    {q:"Prove that the sum of any three consecutive integers is always divisible by 3.",
+     a:"Let integers be n, n+1, n+2. Sum = 3n+3 = 3(n+1). This is always divisible by 3."},
+    {q:"Factorise x² − 5x + 6.",
+     a:"(x−2)(x−3). Roots are x=2 and x=3."},
+    {q:"Solve 2x² − 5x − 3 = 0.",
+     a:"Factorise: (2x+1)(x−3) = 0. So x = −0.5 or x = 3."},
+    {q:"Prove that the product of two odd numbers is always odd.",
+     a:"Let the odd numbers be (2m+1) and (2n+1). Product = 4mn+2m+2n+1 = 2(2mn+m+n)+1 — of the form 2k+1 (odd)."},
+    {q:"Expand and simplify (x+3)(x−2) − x(x+1).",
+     a:"x²+x−6 − x²−x = −6."},
+  ]},
+  "Number & ratio in context": { label:"Wk 2 · Thu 9 Apr", qs:[
+    {q:"A jacket costs £85 after a 15% reduction. Find the original price.",
+     a:"£85 represents 85% of original. Original = 85 ÷ 0.85 = £100."},
+    {q:"Write (3.2 × 10⁵) × (4 × 10³) in standard form.",
+     a:"3.2 × 4 = 12.8, and 10⁵ × 10³ = 10⁸. Result = 12.8 × 10⁸ = 1.28 × 10⁹."},
+    {q:"Share £360 in the ratio 3:5.",
+     a:"Total parts = 8. One part = 360÷8 = £45. Shares: 3×45 = £135 and 5×45 = £225."},
+    {q:"A price rises from £40 to £52. What is the percentage increase?",
+     a:"% increase = (52−40)÷40 × 100 = 12÷40 × 100 = 30%."},
+    {q:"What is the upper bound of a measurement of 7.4 cm (to 1 d.p.)?",
+     a:"7.45 cm (add half of the degree of precision: 0.5 × 0.1 = 0.05)."},
+  ]},
+  "Geometry & surface area": { label:"Wk 3 · Thu 16 Apr", qs:[
+    {q:"What is the formula for the area of a trapezium?",
+     a:"Area = ½ × (a + b) × h, where a and b are the parallel sides and h is the perpendicular height."},
+    {q:"A cylinder has radius 4 cm and height 10 cm. Calculate total surface area (in terms of π).",
+     a:"2πr² + 2πrh = 32π + 80π = 112π cm²."},
+    {q:"Two similar shapes have volumes in ratio 27:8. Find the ratio of their surface areas.",
+     a:"Volume ratio 27:8 → linear ratio k = ∛(27/8) = 3/2. Area ratio = k² = 9/4, so 9:4."},
+    {q:"What is the formula for the volume of a cone?",
+     a:"V = ⅓ × π × r² × h."},
+    {q:"A circle has radius 5 cm. Calculate the area of a sector with angle 72°.",
+     a:"Area = (72/360) × π × 5² = 0.2 × 25π = 5π cm² ≈ 15.7 cm²."},
+  ]},
+  "Statistics": { label:"Wk 4 · Thu 23 Apr", qs:[
+    {q:"What is the difference between mean, median and mode?",
+     a:"Mean: sum ÷ count. Median: middle value when ordered. Mode: most frequent value."},
+    {q:"What does a cumulative frequency graph let you find?",
+     a:"The median (at 50% of total), lower quartile (25%), upper quartile (75%), and interquartile range."},
+    {q:"What is the interquartile range and why is it useful?",
+     a:"IQR = upper quartile − lower quartile. Measures the spread of the middle 50% of data — less affected by outliers."},
+    {q:"In a histogram, how do you find frequency for a bar?",
+     a:"Frequency = frequency density × class width."},
+    {q:"What does a scatter graph with negative correlation show?",
+     a:"As one variable increases, the other decreases — e.g. as temperature rises, hot drink sales fall."},
+  ]},
+  "Geometry & surface area (2nd session)": { label:"Wk 5 · Thu 30 Apr", qs:[
+    {q:"What is the formula for the volume of a sphere?",
+     a:"V = (4/3) × π × r³."},
+    {q:"A cone has base radius 3 cm and slant height 5 cm. Find the curved surface area.",
+     a:"Curved surface area = π × r × l = π × 3 × 5 = 15π cm²."},
+    {q:"Explain the difference between similar and congruent shapes.",
+     a:"Similar: same shape, different size — angles equal, sides in proportion. Congruent: same shape AND same size."},
+    {q:"Find the surface area of a sphere with radius 6 cm (in terms of π).",
+     a:"4πr² = 4 × π × 36 = 144π cm²."},
+    {q:"What are the four conditions for congruent triangles?",
+     a:"SSS, SAS, ASA, RHS."},
+  ]},
+  "Probability & tree diagrams": { label:"Wk 6 · Thu 7 May", qs:[
+    {q:"A bag has 4 red and 6 blue balls. Two drawn WITHOUT replacement. P(both red)?",
+     a:"P = (4/10) × (3/9) = 12/90 = 2/15."},
+    {q:"What is the rule for independent events?",
+     a:"P(A and B) = P(A) × P(B). The outcome of one does not affect the other."},
+    {q:"P(A) = 0.4, P(B) = 0.3, P(A and B) = 0.15. Find P(A or B).",
+     a:"P(A or B) = P(A) + P(B) − P(A and B) = 0.4 + 0.3 − 0.15 = 0.55."},
+    {q:"What is conditional probability?",
+     a:"The probability of A given B has occurred: P(A|B) = P(A and B) ÷ P(B)."},
+    {q:"In a tree diagram without replacement, how does the second branch probability change?",
+     a:"Denominator reduces by 1 (one fewer item). If the same type was drawn, numerator also reduces by 1."},
+  ]},
+  "Circle theorems": { label:"Wk 8 · Sun 24 May", qs:[
+    {q:"State the angle at the centre theorem.",
+     a:"The angle subtended at the centre is twice the angle subtended at the circumference by the same arc."},
+    {q:"What is the angle in a semicircle?",
+     a:"Always 90° — the angle subtended by a diameter at the circumference is a right angle."},
+    {q:"State the cyclic quadrilateral theorem.",
+     a:"Opposite angles in a cyclic quadrilateral add up to 180°."},
+    {q:"What is the tangent-radius theorem?",
+     a:"A tangent is perpendicular to the radius at the point of contact."},
+    {q:"Why must you state the theorem name in a circle theorem answer?",
+     a:"The reason earns a mark — writing the angle alone without the theorem name is insufficient for full marks."},
+  ]},
+  "Trigonometry non-calc": { label:"Wk 9 · Thu 28 May", qs:[
+    {q:"What is the exact value of sin 30°?",
+     a:"0.5 (or 1/2)."},
+    {q:"What is the exact value of cos 60°?",
+     a:"0.5 (or 1/2)."},
+    {q:"What is the exact value of tan 45°?",
+     a:"1."},
+    {q:"Calculate the exact value of sin 60° × cos 30°.",
+     a:"sin 60° = √3/2, cos 30° = √3/2. Product = 3/4."},
+    {q:"When should you use the sine rule rather than SOHCAHTOA?",
+     a:"The sine rule is for non-right-angled triangles with an angle-side pair. SOHCAHTOA is only for right-angled triangles."},
+  ]},
+},
+
+"Physics": {
+  "Forces & motion": { label:"Wk 1 · Sun 5 Apr", qs:[
+    {q:"State Newton's Second Law as an equation.",
+     a:"F = ma (resultant force = mass × acceleration). Force in N, mass in kg, acceleration in m/s²."},
+    {q:"What does the gradient of a velocity-time graph represent?",
+     a:"The acceleration of the object."},
+    {q:"What does the area under a velocity-time graph represent?",
+     a:"The distance travelled (displacement)."},
+    {q:"What is stopping distance made up of?",
+     a:"Thinking distance (reaction time) + braking distance (depends on speed, road condition, vehicle mass/condition)."},
+    {q:"What is momentum and what is its unit?",
+     a:"Momentum (p) = mass × velocity. Unit: kg m/s."},
+  ]},
+  "Equation rearrangement & unit conversion": { label:"Wk 2 · Sun 12 Apr", qs:[
+    {q:"Convert 5.6 km to metres.",
+     a:"5,600 m (multiply by 1000)."},
+    {q:"Convert 250 mA to amps.",
+     a:"0.25 A (divide by 1000)."},
+    {q:"Rearrange V = IR to find current (I).",
+     a:"I = V ÷ R."},
+    {q:"Rearrange KE = ½mv² to find velocity (v).",
+     a:"v = √(2 × KE ÷ m)."},
+    {q:"Convert 72 km/h to m/s.",
+     a:"72 × 1000 ÷ 3600 = 20 m/s."},
+  ]},
+  "Energy": { label:"Wk 3 · Sun 19 Apr", qs:[
+    {q:"Write the equation for kinetic energy.",
+     a:"KE = ½ × m × v². Units: joules (J)."},
+    {q:"Write the equation for gravitational potential energy.",
+     a:"GPE = m × g × h. (g = 10 N/kg on Earth). Units: joules (J)."},
+    {q:"What is efficiency?",
+     a:"Efficiency = useful output energy ÷ total input energy. Expressed as a decimal or percentage. Always less than 1 (100%)."},
+    {q:"A 2 kg ball rolls at 3 m/s. Calculate its kinetic energy.",
+     a:"KE = ½ × 2 × 3² = ½ × 2 × 9 = 9 J."},
+    {q:"What is the principle of conservation of energy?",
+     a:"Energy cannot be created or destroyed — only transferred between stores. Total energy always remains the same."},
+  ]},
+  "Equation rearrangement & unit conversion (2nd session)": { label:"Wk 4 · Sun 26 Apr", qs:[
+    {q:"Convert 3.5 kg to grams.",
+     a:"3,500 g (multiply by 1000)."},
+    {q:"Rearrange GPE = mgh to find h.",
+     a:"h = GPE ÷ (m × g)."},
+    {q:"Rearrange P = E/t to find energy (E).",
+     a:"E = P × t."},
+    {q:"Convert 0.045 m to cm.",
+     a:"4.5 cm (multiply by 100)."},
+    {q:"A wave has speed 300 m/s and frequency 150 Hz. What is the wavelength?",
+     a:"Wavelength = v ÷ f = 300 ÷ 150 = 2 m."},
+  ]},
+  "Waves & wave calculations": { label:"Wk 5 · Sun 3 May", qs:[
+    {q:"Write the equation linking wave speed, frequency and wavelength.",
+     a:"v = f × λ. Speed in m/s, frequency in Hz, wavelength in metres."},
+    {q:"A wave has frequency 200 Hz and wavelength 1.5 m. Calculate the wave speed.",
+     a:"v = 200 × 1.5 = 300 m/s."},
+    {q:"What is the speed of all EM waves in a vacuum?",
+     a:"3 × 10⁸ m/s (300,000,000 m/s)."},
+    {q:"List the EM spectrum from lowest to highest frequency.",
+     a:"Radio, microwave, infrared, visible light, ultraviolet, X-ray, gamma."},
+    {q:"What is the period of a wave with frequency 50 Hz?",
+     a:"T = 1/f = 1/50 = 0.02 s."},
+  ]},
+  "Electricity calculations": { label:"Wk 7 · Mon 11 May", qs:[
+    {q:"State Ohm's Law.",
+     a:"V = I × R (voltage = current × resistance). V in volts, I in amps, R in ohms."},
+    {q:"Calculate the current through a 30 Ω resistor connected to 6 V.",
+     a:"I = V/R = 6/30 = 0.2 A."},
+    {q:"In a series circuit, what is the same throughout?",
+     a:"The current — it is the same through all components."},
+    {q:"In a parallel circuit, what is the same across all branches?",
+     a:"The voltage (potential difference)."},
+    {q:"Write the three equations for electrical power.",
+     a:"P = IV, P = I²R, P = V²/R."},
+  ]},
+  "Electricity calculations (2nd session)": { label:"Wk 9 · Tue 26 May", qs:[
+    {q:"Two resistors of 4 Ω and 8 Ω are in series across 12 V. Find the total resistance.",
+     a:"R total = 4 + 8 = 12 Ω."},
+    {q:"Using the series circuit above, find the current.",
+     a:"I = V/R = 12/12 = 1 A."},
+    {q:"What is electrical charge and what is its unit?",
+     a:"Q = I × t (charge = current × time). Unit: coulombs (C)."},
+    {q:"A 60 W bulb runs for 2 hours. Calculate the energy transferred.",
+     a:"E = P × t = 60 × 7200 = 432,000 J (or 432 kJ)."},
+    {q:"What shape is the I-V graph for a filament lamp, and what does it show?",
+     a:"A curve that gets less steep — resistance increases as temperature rises."},
+  ]},
+  "Magnetism": { label:"Wk 8 · Tue 19 May", qs:[
+    {q:"What is the motor effect?",
+     a:"A current-carrying conductor in a magnetic field experiences a force. Direction given by Fleming's left-hand rule."},
+    {q:"What is electromagnetic induction?",
+     a:"A voltage is induced when a conductor moves through a magnetic field (or the field changes). Basis of generators."},
+    {q:"What is the transformer equation?",
+     a:"V₁/V₂ = n₁/n₂ (primary voltage/secondary voltage = primary turns/secondary turns)."},
+    {q:"Why does the National Grid use high voltage?",
+     a:"High voltage = low current (P = IV). Low current = less energy lost as heat in cables (P = I²R)."},
+    {q:"What is a step-up transformer?",
+     a:"Secondary coil has more turns than the primary — increases voltage and decreases current."},
+  ]},
+  "Particle model": { label:"Wk 11 · Mon 8 Jun", qs:[
+    {q:"What is density and what is its formula?",
+     a:"Density = mass ÷ volume. Unit: kg/m³."},
+    {q:"What is specific heat capacity?",
+     a:"The energy needed to raise 1 kg of a substance by 1°C. Formula: Q = mcΔT."},
+    {q:"What is latent heat?",
+     a:"The energy needed to change state (e.g. melt or boil) WITHOUT changing temperature."},
+    {q:"Why is temperature constant during a change of state?",
+     a:"Energy supplied breaks intermolecular bonds, not increasing kinetic energy of particles."},
+    {q:"What happens to gas pressure when temperature increases (at constant volume)?",
+     a:"Pressure increases — particles move faster, collide with walls more frequently and with greater force."},
+  ]},
+  "Required practicals": { label:"Wk 11 · Thu 11 Jun", qs:[
+    {q:"In the specific heat capacity practical, why is the measured SHC usually higher than theoretical?",
+     a:"Heat energy is lost to the surroundings and the container — so more energy is needed than the equation predicts."},
+    {q:"What shape is the I-V characteristic graph for an ohmic resistor?",
+     a:"A straight line through the origin — constant resistance regardless of voltage."},
+    {q:"In the waves practical, how do you calculate wave speed from a ripple tank?",
+     a:"Measure frequency (waves per second) and wavelength (distance between crests), then use v = fλ."},
+    {q:"What are the control variables in a resistance investigation?",
+     a:"Temperature of the wire, material of the wire, and cross-sectional area (or use the same wire throughout)."},
+    {q:"Why allow a filament lamp to cool between I-V readings?",
+     a:"To ensure each reading is taken at the same starting temperature — residual heat affects resistance."},
+  ]},
+},
+}; // end QUIZZES
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentSubject = null;
+let currentTopic = null;
+let currentQs = [];
+let qIndex = 0;
+let score = 0;
+let revealed = false;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  const grid = document.getElementById('subjectGrid');
+  Object.entries(SUBJECTS).forEach(([name, cfg]) => {
+    const topics = Object.keys(QUIZZES[name] || {});
+    if (!topics.length) return;
+    const btn = document.createElement('button');
+    btn.className = `subj-btn ${cfg.cls}`;
+    btn.innerHTML = `<div class="subj-name">${name}</div><div class="subj-count">${topics.length} topic${topics.length!==1?'s':''}</div>`;
+    btn.onclick = () => openSubject(name, cfg.color);
+    grid.appendChild(btn);
+  });
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── HOME ──────────────────────────────────────────────────────────────────────
+function goHome() { showScreen('home'); }
+
+// ── TOPICS ────────────────────────────────────────────────────────────────────
+function openSubject(subj, color) {
+  currentSubject = subj;
+  document.getElementById('menuSubjName').textContent = subj;
+  document.getElementById('menuSubjSub').textContent = `${Object.keys(QUIZZES[subj]).length} topics available`;
+  document.getElementById('menuSubjName').style.color = color;
+
+  const list = document.getElementById('topicList');
+  list.innerHTML = '';
+  Object.entries(QUIZZES[subj]).forEach(([topic, data]) => {
+    const item = document.createElement('div');
+    item.className = 'topic-item';
+    item.style.setProperty('--tc', color);
+    item.innerHTML = `
+      <div class="topic-dot" style="background:${color}"></div>
+      <div class="topic-info">
+        <div class="topic-name">${topic}</div>
+        <div class="topic-meta">${data.label} · ${data.qs.length} questions</div>
+      </div>
+      <div class="topic-arrow">›</div>`;
+    item.onclick = () => startQuiz(subj, topic, color);
+    list.appendChild(item);
+  });
+  showScreen('topics');
+}
+
+function goTopics() { showScreen('topics'); }
+
+// ── QUIZ ──────────────────────────────────────────────────────────────────────
+function startQuiz(subj, topic, color) {
+  currentSubject = subj;
+  currentTopic = topic;
+  currentQs = QUIZZES[subj][topic].qs;
+  qIndex = 0;
+  score = 0;
+  revealed = false;
+
+  // Apply subject colour
+  document.querySelectorAll('.progress-fill').forEach(el => el.style.background = color);
+
+  const cfg = SUBJECTS[subj];
+  document.getElementById('quizSubjLabel').textContent = subj.toUpperCase();
+  document.getElementById('quizSubjLabel').style.color = color;
+  document.getElementById('quizTopicLabel').textContent = topic;
+
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const wrap = document.getElementById('questionWrap');
+
+  if (qIndex >= currentQs.length) {
+    renderResult(wrap);
+    return;
+  }
+
+  const q = currentQs[qIndex];
+  const pct = (qIndex / currentQs.length) * 100;
+  const color = SUBJECTS[currentSubject].color;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressTxt').textContent = `Q${qIndex+1} of ${currentQs.length}`;
+  document.getElementById('scoreDisplay').textContent = `${score}/${currentQs.length}`;
+
+  wrap.innerHTML = `
+    <div class="q-card" id="qCard" style="--subj-color:${color}">
+      <div class="q-card-top-bar" style="position:absolute;top:0;left:0;right:0;height:3px;background:${color}"></div>
+      <div class="q-label">QUESTION ${qIndex + 1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="answer-area answer-hidden" id="answerArea">
+        <div class="answer-label-txt" style="color:${color}">ANSWER</div>
+        <div class="answer-text">${q.a}</div>
+      </div>
+      <div class="btn-row" id="btnRow">
+        <button class="btn btn-reveal" onclick="revealAnswer()" style="background:${color}">Reveal Answer</button>
+      </div>
+    </div>`;
+}
+
+function revealAnswer() {
+  document.getElementById('answerArea').classList.remove('answer-hidden');
+  const color = SUBJECTS[currentSubject].color;
+  document.getElementById('btnRow').innerHTML = `
+    <button class="btn btn-got" onclick="mark(true)">✓ Got it!</button>
+    <button class="btn btn-nope" onclick="mark(false)">✗ Not quite</button>`;
+}
+
+function mark(correct) {
+  if (correct) score++;
+  const card = document.getElementById('qCard');
+  card.classList.add(correct ? 'flash-g' : 'flash-r');
+  setTimeout(() => {
+    qIndex++;
+    renderQuestion();
+  }, 450);
+}
+
+function renderResult(wrap) {
+  const pct = score / currentQs.length;
+  const color = SUBJECTS[currentSubject].color;
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressTxt').textContent = 'Done!';
+  document.getElementById('scoreDisplay').textContent = `${score}/${currentQs.length}`;
+
+  let emoji, msg, sub;
+  if (pct === 1) {
+    emoji = '🏆'; msg = 'Perfect score!';
+    sub = 'Full marks — this topic is locked in.\nKeep it sharp with the revision pack.';
+  } else if (pct >= 0.6) {
+    emoji = '💪'; msg = 'Solid effort!';
+    sub = `${score} out of ${currentQs.length} — good foundation.\nReview the ones missed in the revision pack.`;
+  } else {
+    emoji = '📚'; msg = 'More reps needed!';
+    sub = `${score} out of ${currentQs.length}.\nFlashcard time — flip through the relevant cards tonight.`;
+  }
+
+  wrap.innerHTML = `
+    <div class="result-wrap">
+      <div class="result-card">
+        <span class="result-emoji">${emoji}</span>
+        <div class="result-score">${score}<em>/${currentQs.length}</em></div>
+        <div class="result-msg">${msg}</div>
+        <div class="result-sub">${sub}</div>
+        <button class="btn-again" onclick="startQuiz('${currentSubject}','${currentTopic}','${color}')" style="background:${color}">Try again</button>
+        <button class="btn-menu" onclick="goTopics()">← Back to topics</button>
+      </div>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>
